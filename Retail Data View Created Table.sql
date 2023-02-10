@@ -54,23 +54,19 @@ FROM grocery_data
 GROUP BY customer_type, lifestage) t1
 GROUP BY customer_type, lifestage;
 ---- Brand affinity for YOUNG SINGLES/COUPLES and Mainstream----
-SELECT brand_name, SUM(product_quantity)/(SELECT SUM(t1.total_quantity)
-													FROM (
-													SELECT brand_name, SUM(product_quantity) total_quantity
-													FROM grocery_data
-													WHERE customer_type = 'Mainstream' AND lifestage = 'YOUNG SINGLES/COUPLES'
-													GROUP BY brand_name	
-													)t1) percent_of_total
+SELECT brand_name, SUM(product_quantity)/(SELECT SUM(t1.total_quantity) FROM (SELECT brand_name, SUM(product_quantity) total_quantity
+									      FROM grocery_data
+									      WHERE customer_type = 'Mainstream' AND lifestage = 'YOUNG SINGLES/COUPLES'
+									      GROUP BY brand_name	
+									     )t1) percent_of_total
 FROM grocery_data
 GROUP BY brand_name;
 ----- Brand affinity compared to the rest of the population
-SELECT brand_name, SUM(product_quantity)/(SELECT SUM(t1.total_quantity)
-													FROM (
-													SELECT brand_name, SUM(product_quantity) total_quantity
-													FROM grocery_data
-													WHERE customer_type != 'Mainstream' AND lifestage != 'YOUNG SINGLES/COUPLES'
-													GROUP BY brand_name	
-													)t1) percent_of_total
+SELECT brand_name, SUM(product_quantity)/(SELECT SUM(t1.total_quantity) FROM (SELECT brand_name, SUM(product_quantity) total_quantity
+									      FROM grocery_data
+									      WHERE customer_type != 'Mainstream' AND lifestage != 'YOUNG SINGLES/COUPLES'
+									      GROUP BY brand_name
+									      )t1) percent_of_total
 FROM grocery_data
 GROUP BY brand_name;
 
